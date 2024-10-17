@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  http:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - script
+
+  script:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    volumes:
+      - ./src:/app
+
+  data:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tpdb
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

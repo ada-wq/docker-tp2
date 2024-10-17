@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  data:
+    build:
+      context: ./data
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+    networks:
+      - wordpress-network
+
+  script:
+    build:
+      context: ./script
+    networks:
+      - wordpress-network
+
+  http:
+    build:
+      context: ./http
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/app
+    networks:
+      - wordpress-network
+    depends_on:
+      - script
+
+networks:
+  wordpress-network:
